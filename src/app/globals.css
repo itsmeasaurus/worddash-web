@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #ffe45e;
+  --foreground: #111111;
 }
 
 @theme inline {
@@ -12,15 +12,120 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+.neo-card {
+  border: 4px solid #111111;
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 #111111;
+  padding: 1rem;
+}
+
+.neo-card-mini {
+  border: 3px solid #111111;
+  border-radius: 14px;
+  box-shadow: 4px 4px 0 #111111;
+  padding: 0.75rem;
+}
+
+.neo-title {
+  font-size: 1.45rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.neo-label {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.neo-input {
+  width: 100%;
+  border: 3px solid #111111;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  box-shadow: 4px 4px 0 #111111;
+}
+
+.neo-input:focus {
+  outline: none;
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #111111;
+}
+
+.neo-button {
+  border: 3px solid #111111;
+  border-radius: 12px;
+  padding: 0.62rem 0.95rem;
+  font-size: 0.86rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 4px 4px 0 #111111;
+}
+
+.neo-button:disabled {
+  opacity: 0.6;
+}
+
+.neo-button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #111111;
+}
+
+.neo-button-sm {
+  border: 3px solid #111111;
+  border-radius: 10px;
+  padding: 0.42rem 0.72rem;
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 3px 3px 0 #111111;
+}
+
+.neo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 3px solid #111111;
+  border-radius: 999px;
+  background: #fff;
+  padding: 0.35rem 0.75rem;
+  box-shadow: 3px 3px 0 #111111;
+}
+
+.neo-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: 3px solid #111111;
+  border-radius: 999px;
+  background: #fff;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow: 2px 2px 0 #111111;
+}
+
+.neo-alert {
+  border: 3px solid #111111;
+  border-radius: 12px;
+  background: #fecaca;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 #111111;
 }
