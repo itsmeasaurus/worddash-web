@@ -137,6 +137,11 @@ export default function Home() {
     if (roundProgress > 0.33) return "#f97316";
     return "#ef4444";
   }, [roundProgress]);
+  const ringCircumference = useMemo(() => 2 * Math.PI * 47, []);
+  const ringStroke = useMemo(
+    () => Math.max(0, Math.min(ringCircumference, roundProgress * ringCircumference)),
+    [ringCircumference, roundProgress]
+  );
   const previewText = useMemo(() => {
     if (!round) return "";
     return previewDisplay(round.display, guess);
@@ -531,15 +536,32 @@ export default function Home() {
                   </div>
 
                   {round ? (
-                    <div
-                      className="rounded-[20px] p-[6px]"
-                      style={{
-                        background: `conic-gradient(${roundBorderColor} 0deg ${Math.round(
-                          roundProgress * 360
-                        )}deg, #1f2937 ${Math.round(roundProgress * 360)}deg 360deg)`
-                      }}
-                    >
-                      <div className="rounded-[16px] border-4 border-black bg-[#fffbe8] p-5">
+                    <div className="relative rounded-[20px] border-4 border-black bg-[#111827] p-[6px] shadow-[5px_5px_0_#000]">
+                      <svg
+                        className="pointer-events-none absolute inset-0 h-full w-full -rotate-90"
+                        viewBox="0 0 100 100"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="47"
+                          fill="none"
+                          stroke="#1f2937"
+                          strokeWidth="6"
+                        />
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r="47"
+                          fill="none"
+                          stroke={roundBorderColor}
+                          strokeWidth="6"
+                          strokeLinecap="round"
+                          strokeDasharray={`${ringStroke} ${ringCircumference}`}
+                        />
+                      </svg>
+                      <div className="relative rounded-[16px] border-4 border-black bg-[#fffbe8] p-5">
                         <p className="text-xs font-black uppercase tracking-wider">Guess Word</p>
                         <p className="mt-2 text-3xl font-black tracking-[0.35em]">{previewText}</p>
                         <p className="mt-3 text-sm font-semibold">
