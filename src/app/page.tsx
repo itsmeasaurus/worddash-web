@@ -17,7 +17,6 @@ type Player = {
 type RoundState = {
   display: string;
   hint: string;
-  roundEndsAt: number;
   roundDurationMs: number;
 };
 
@@ -91,6 +90,7 @@ function previewDisplay(baseDisplay: string, typedGuess: string) {
 
 export default function Home() {
   const socketRef = useRef<Socket | null>(null);
+  const roundClientEndsAtRef = useRef(0);
 
   const [nickname, setNickname] = useState("");
   const [roomCodeInput, setRoomCodeInput] = useState(() => {
@@ -140,6 +140,10 @@ export default function Home() {
   const roundProgressPercent = useMemo(
     () => Math.max(0, Math.min(100, Math.round(roundProgress * 100))),
     [roundProgress]
+  );
+  const roundRemainingSeconds = useMemo(
+    () => Math.max(0, Math.ceil(roundRemainingMs / 1000)),
+    [roundRemainingMs]
   );
   const previewText = useMemo(() => {
     if (!round) return "";
@@ -193,14 +197,18 @@ export default function Home() {
 
     socket.on(
       "game:round",
-      (payload: { display: string; hint: string; roundEndsAt: number; roundDurationMs: number }) => {
+      (payload: { display: string; hint: string; roundDurationMs?: number }) => {
+        const durationMs =
+          typeof payload.roundDurationMs === "number" && payload.roundDurationMs > 0
+            ? payload.roundDurationMs
+            : 30_000;
+        roundClientEndsAtRef.current = Date.now() + durationMs;
         setRound({
           display: payload.display,
           hint: payload.hint,
-          roundEndsAt: payload.roundEndsAt,
-          roundDurationMs: payload.roundDurationMs
+          roundDurationMs: durationMs
         });
-        setRoundRemainingMs(payload.roundDurationMs);
+        setRoundRemainingMs(durationMs);
         setRoundEnd(null);
         setGuessFeedback(null);
         setGuess("");
@@ -208,6 +216,7 @@ export default function Home() {
     );
 
     socket.on("game:roundEnded", (payload: RoundEnd) => {
+      roundClientEndsAtRef.current = 0;
       setRound(null);
       setRoundRemainingMs(0);
       setRoundEnd(payload);
@@ -216,6 +225,7 @@ export default function Home() {
     });
 
     socket.on("game:ended", (payload: GameEnded) => {
+      roundClientEndsAtRef.current = 0;
       setRoomStatus("finished");
       setEnded(payload);
       setRound(null);
@@ -252,7 +262,7 @@ export default function Home() {
   useEffect(() => {
     if (!round) return;
     const tick = window.setInterval(() => {
-      const nextMs = Math.max(0, round.roundEndsAt - Date.now());
+      const nextMs = Math.max(0, roundClientEndsAtRef.current - Date.now());
       setRoundRemainingMs(nextMs);
     }, 100);
     return () => window.clearInterval(tick);
@@ -519,7 +529,7 @@ export default function Home() {
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="neo-tag bg-[#fef08a]">Match Time {globalSeconds}s</span>
                       <span className="neo-tag bg-[#fdba74]">
-                        Round {Math.ceil(roundRemainingMs / 1000)}s
+                        Round {roundRemainingSeconds}s
                       </span>
                       {isHost ? (
                         <button
@@ -540,7 +550,7 @@ export default function Home() {
                         <div className="mb-4">
                           <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-[#111]">
                             <span>Round Timer</span>
-                            <span>{roundProgressPercent}%</span>
+                            <span>{roundRemainingSeconds}s</span>
                           </div>
                           <div className="mt-2 h-3 rounded-full border-2 border-black bg-[#e5e7eb]">
                             <div
