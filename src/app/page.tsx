@@ -528,9 +528,6 @@ export default function Home() {
                     <h2 className="neo-title">Game In Progress</h2>
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="neo-tag bg-[#fef08a]">Match Time {globalSeconds}s</span>
-                      <span className="neo-tag bg-[#fdba74]">
-                        Round {roundRemainingSeconds}s
-                      </span>
                       {isHost ? (
                         <button
                           type="button"
