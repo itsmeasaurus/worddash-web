@@ -30,6 +30,11 @@ type GameEnded = {
   winners: string[];
 };
 
+type GuessFeedback = {
+  status: "correct" | "incorrect";
+  message: string;
+};
+
 const SOCKET_URL = process.env.NEXT_PUBLIC_SOCKET_URL ?? "";
 const APP_STATUS = (process.env.NEXT_PUBLIC_APP_STATUS ?? "enabled").toLowerCase();
 
@@ -47,6 +52,7 @@ export default function Home() {
   const [round, setRound] = useState<RoundState | null>(null);
   const [roundEnd, setRoundEnd] = useState<RoundEnd | null>(null);
   const [ended, setEnded] = useState<GameEnded | null>(null);
+  const [guessFeedback, setGuessFeedback] = useState<GuessFeedback | null>(null);
   const [guess, setGuess] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -94,6 +100,7 @@ export default function Home() {
       setRoomStatus("in_game");
       setRoundEnd(null);
       setEnded(null);
+      setGuessFeedback(null);
     });
     socket.on("game:tick", (payload: { remainingSeconds: number }) => {
       setGlobalSeconds(payload.remainingSeconds);
@@ -108,20 +115,46 @@ export default function Home() {
     socket.on("game:roundEnded", (payload: RoundEnd) => {
       setRound(null);
       setRoundEnd(payload);
+      setGuessFeedback(null);
     });
     socket.on("game:ended", (payload: GameEnded) => {
       setRoomStatus("finished");
       setEnded(payload);
       setRound(null);
       setRoundEnd(null);
+      setGuessFeedback(null);
       setGlobalSeconds(0);
     });
+    socket.on(
+      "game:guessResult",
+      (payload: { status: "correct" | "incorrect"; word?: string; points?: number }) => {
+        if (payload.status === "correct") {
+          setGuessFeedback({
+            status: "correct",
+            message: `Correct! +${payload.points ?? 0} points`
+          });
+        } else {
+          setGuessFeedback({
+            status: "incorrect",
+            message: "Not quite. Try another guess!"
+          });
+        }
+      }
+    );
 
     return () => {
       socket.disconnect();
       socketRef.current = null;
     };
   }, [missingSocketUrl]);
+
+  useEffect(() => {
+    if (!guessFeedback) return;
+    const timer = window.setTimeout(() => {
+      setGuessFeedback(null);
+    }, 900);
+    return () => window.clearTimeout(timer);
+  }, [guessFeedback]);
 
   function withSocket(action: (socket: Socket) => void) {
     const socket = socketRef.current;
@@ -224,6 +257,19 @@ export default function Home() {
         setBusy(false);
         if (!result.ok) {
           setError(result.message ?? "Failed to reset room");
+        }
+      });
+    });
+  }
+
+  function endGameNow() {
+    setBusy(true);
+    setError("");
+    withSocket((socket) => {
+      socket.emit("game:end", {}, (result: { ok: boolean; message?: string }) => {
+        setBusy(false);
+        if (!result.ok) {
+          setError(result.message ?? "Failed to end game");
         }
       });
     });
@@ -350,10 +396,22 @@ export default function Home() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h2 className="text-lg font-medium">Game In Progress</h2>
-                    <p className="text-sm text-slate-200">
-                      Time Left:{" "}
-                      <span className="font-semibold text-emerald-300">{globalSeconds}s</span>
-                    </p>
+                    <div className="flex items-center gap-3">
+                      <p className="text-sm text-slate-200">
+                        Time Left:{" "}
+                        <span className="font-semibold text-emerald-300">{globalSeconds}s</span>
+                      </p>
+                      {isHost ? (
+                        <button
+                          type="button"
+                          onClick={endGameNow}
+                          className="rounded-md border border-rose-400/60 bg-rose-500/10 px-3 py-1.5 text-xs font-medium text-rose-200 hover:bg-rose-500/20"
+                          disabled={busy}
+                        >
+                          End Game
+                        </button>
+                      ) : null}
+                    </div>
                   </div>
 
                   {round ? (
@@ -391,6 +449,18 @@ export default function Home() {
                           <span className="font-semibold">{roundEnd.word}</span>.
                         </p>
                       )}
+                    </div>
+                  ) : null}
+
+                  {guessFeedback ? (
+                    <div
+                      className={`rounded-lg border p-3 text-sm font-medium transition-all duration-300 ${
+                        guessFeedback.status === "correct"
+                          ? "animate-pulse border-emerald-400/60 bg-emerald-500/15 text-emerald-200"
+                          : "animate-pulse border-amber-400/60 bg-amber-500/15 text-amber-100"
+                      }`}
+                    >
+                      {guessFeedback.message}
                     </div>
                   ) : null}
 
