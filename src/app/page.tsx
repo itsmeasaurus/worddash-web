@@ -137,10 +137,9 @@ export default function Home() {
     if (roundProgress > 0.33) return "#f97316";
     return "#ef4444";
   }, [roundProgress]);
-  const ringPerimeter = useMemo(() => 355.4, []);
-  const ringStroke = useMemo(
-    () => Math.max(0, Math.min(ringPerimeter, roundProgress * ringPerimeter)),
-    [ringPerimeter, roundProgress]
+  const roundProgressPercent = useMemo(
+    () => Math.max(0, Math.min(100, Math.round(roundProgress * 100))),
+    [roundProgress]
   );
   const previewText = useMemo(() => {
     if (!round) return "";
@@ -372,7 +371,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-[#ffe45e] px-4 py-6 text-[#111] md:px-8">
+    <div className="min-h-screen overflow-x-hidden bg-[#ffe45e] px-4 py-6 text-[#111] md:px-8">
       <main className="mx-auto flex w-full max-w-6xl flex-col gap-5">
         <header className="neo-card bg-[#fffcf5]">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -536,39 +535,27 @@ export default function Home() {
                   </div>
 
                   {round ? (
-                    <div className="relative rounded-[20px] border-4 border-black bg-[#111827] p-[6px] shadow-[5px_5px_0_#000]">
-                      <svg
-                        className="pointer-events-none absolute inset-0 h-full w-full -rotate-90"
-                        viewBox="0 0 100 100"
-                        preserveAspectRatio="none"
-                        aria-hidden="true"
-                      >
-                        <rect
-                          x="3"
-                          y="3"
-                          width="94"
-                          height="94"
-                          rx="12"
-                          fill="none"
-                          stroke="#1f2937"
-                          strokeWidth="6"
-                        />
-                        <rect
-                          x="3"
-                          y="3"
-                          width="94"
-                          height="94"
-                          rx="12"
-                          fill="none"
-                          stroke={roundBorderColor}
-                          strokeWidth="6"
-                          strokeLinecap="round"
-                          strokeDasharray={`${ringStroke} ${ringPerimeter}`}
-                        />
-                      </svg>
-                      <div className="relative rounded-[16px] border-4 border-black bg-[#fffbe8] p-5">
+                    <div className="rounded-[20px] border-4 border-black bg-[#111827] p-[6px] shadow-[5px_5px_0_#000]">
+                      <div className="rounded-[16px] border-4 border-black bg-[#fffbe8] p-5">
+                        <div className="mb-4">
+                          <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider text-[#111]">
+                            <span>Round Timer</span>
+                            <span>{roundProgressPercent}%</span>
+                          </div>
+                          <div className="mt-2 h-3 rounded-full border-2 border-black bg-[#e5e7eb]">
+                            <div
+                              className="h-full rounded-full transition-all duration-100 ease-linear"
+                              style={{
+                                width: `${roundProgressPercent}%`,
+                                backgroundColor: roundBorderColor
+                              }}
+                            />
+                          </div>
+                        </div>
                         <p className="text-xs font-black uppercase tracking-wider">Guess Word</p>
-                        <p className="mt-2 text-3xl font-black tracking-[0.35em]">{previewText}</p>
+                        <p className="mt-2 w-full overflow-hidden text-center text-[clamp(1.1rem,4vw,1.875rem)] font-black leading-none tracking-[0.2em] whitespace-nowrap sm:tracking-[0.35em]">
+                          {previewText}
+                        </p>
                         <p className="mt-3 text-sm font-semibold">
                           Hint: <span className="font-black">{round.hint}</span>
                         </p>

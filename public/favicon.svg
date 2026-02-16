@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="WordDash">
+  <rect x="4" y="4" width="56" height="56" rx="12" fill="#111827" stroke="#000000" stroke-width="4"/>
+  <rect x="10" y="10" width="44" height="44" rx="9" fill="#ffe45e" stroke="#000000" stroke-width="3"/>
+  <text x="32" y="40" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="900" fill="#111827">W</text>
+</svg>

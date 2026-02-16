@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "WordDash",
   description: "Realtime multiplayer word guessing game",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
