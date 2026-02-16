@@ -534,9 +534,9 @@ export default function Home() {
                     <div
                       className="rounded-[20px] p-[6px]"
                       style={{
-                        background: `conic-gradient(${roundBorderColor} ${Math.round(
+                        background: `conic-gradient(${roundBorderColor} 0deg ${Math.round(
                           roundProgress * 360
-                        )}deg, #1f2937 0deg)`
+                        )}deg, #1f2937 ${Math.round(roundProgress * 360)}deg 360deg)`
                       }}
                     >
                       <div className="rounded-[16px] border-4 border-black bg-[#fffbe8] p-5">
