@@ -137,10 +137,10 @@ export default function Home() {
     if (roundProgress > 0.33) return "#f97316";
     return "#ef4444";
   }, [roundProgress]);
-  const ringCircumference = useMemo(() => 2 * Math.PI * 47, []);
+  const ringPerimeter = useMemo(() => 355.4, []);
   const ringStroke = useMemo(
-    () => Math.max(0, Math.min(ringCircumference, roundProgress * ringCircumference)),
-    [ringCircumference, roundProgress]
+    () => Math.max(0, Math.min(ringPerimeter, roundProgress * ringPerimeter)),
+    [ringPerimeter, roundProgress]
   );
   const previewText = useMemo(() => {
     if (!round) return "";
@@ -540,25 +540,30 @@ export default function Home() {
                       <svg
                         className="pointer-events-none absolute inset-0 h-full w-full -rotate-90"
                         viewBox="0 0 100 100"
+                        preserveAspectRatio="none"
                         aria-hidden="true"
                       >
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="47"
+                        <rect
+                          x="3"
+                          y="3"
+                          width="94"
+                          height="94"
+                          rx="12"
                           fill="none"
                           stroke="#1f2937"
                           strokeWidth="6"
                         />
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r="47"
+                        <rect
+                          x="3"
+                          y="3"
+                          width="94"
+                          height="94"
+                          rx="12"
                           fill="none"
                           stroke={roundBorderColor}
                           strokeWidth="6"
                           strokeLinecap="round"
-                          strokeDasharray={`${ringStroke} ${ringCircumference}`}
+                          strokeDasharray={`${ringStroke} ${ringPerimeter}`}
                         />
                       </svg>
                       <div className="relative rounded-[16px] border-4 border-black bg-[#fffbe8] p-5">
