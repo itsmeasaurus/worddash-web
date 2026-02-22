@@ -116,35 +116,43 @@ export default function Home() {
   const [busy, setBusy] = useState(false);
 
   const missingSocketUrl = !SOCKET_URL;
+
   const isHost = useMemo(
     () => players.some((player) => player.id === playerId && player.isHost),
     [playerId, players]
   );
+
   const sortedPlayers = useMemo(
     () => [...players].sort((a, b) => b.score - a.score),
     [players]
   );
+
   const inviteLink = useMemo(() => {
     if (!roomCode || typeof window === "undefined") return "";
     return `${window.location.origin}/?room=${roomCode}`;
   }, [roomCode]);
+
   const roundProgress = useMemo(() => {
     if (!round || round.roundDurationMs <= 0) return 0;
     return Math.min(1, Math.max(0, roundRemainingMs / round.roundDurationMs));
   }, [round, roundRemainingMs]);
+
   const roundBorderColor = useMemo(() => {
     if (roundProgress > 0.66) return "#facc15";
     if (roundProgress > 0.33) return "#f97316";
     return "#ef4444";
   }, [roundProgress]);
+
   const roundProgressPercent = useMemo(
     () => Math.max(0, Math.min(100, Math.round(roundProgress * 100))),
     [roundProgress]
   );
+
   const roundRemainingSeconds = useMemo(
     () => Math.max(0, Math.ceil(roundRemainingMs / 1000)),
     [roundRemainingMs]
   );
+
   const previewText = useMemo(() => {
     if (!round) return "";
     return previewDisplay(round.display, guess);
@@ -160,14 +168,15 @@ export default function Home() {
       setIsConnected(true);
       setError("");
     });
+
     socket.on("disconnect", () => setIsConnected(false));
+
     socket.on("server:error", (payload: { message?: string }) => {
       setError(payload.message ?? "Unexpected server error");
       setBusy(false);
     });
 
-    socket.on(
-      "room:state",
+    socket.on("room:state",
       (payload: { roomCode: string; status: RoomStatus; players: Player[] }) => {
         setRoomCode(payload.roomCode);
         setRoomStatus(payload.status);
@@ -195,8 +204,7 @@ export default function Home() {
       setGlobalSeconds(payload.remainingSeconds);
     });
 
-    socket.on(
-      "game:round",
+    socket.on("game:round",
       (payload: { display: string; hint: string; roundDurationMs?: number }) => {
         const durationMs =
           typeof payload.roundDurationMs === "number" && payload.roundDurationMs > 0
@@ -236,8 +244,7 @@ export default function Home() {
       setGuess("");
     });
 
-    socket.on(
-      "game:guessResult",
+    socket.on("game:guessResult",
       (payload: { status: "correct" | "incorrect"; points?: number }) => {
         if (payload.status === "correct") {
           setGuessFeedback({
