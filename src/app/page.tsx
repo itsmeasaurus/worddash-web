@@ -228,7 +228,6 @@ export default function Home() {
       setRound(null);
       setRoundRemainingMs(0);
       setRoundEnd(payload);
-      setGuessFeedback(null);
       setGuess("");
     });
 
@@ -406,13 +405,8 @@ export default function Home() {
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {roomCode ? (
               <span className="neo-tag">
-                ROOM <b>{roomCode}</b>
+                ROOM <b className="text-blue-400">{roomCode}</b>
               </span>
-            ) : null}
-            {roomCode && isHost ? (
-              <button type="button" onClick={copyInvite} className="neo-button-sm bg-[#67e8f9]">
-                Copy Invitation Link
-              </button>
             ) : null}
             {copyStatus ? <span className="neo-tag bg-[#d9f99d]">{copyStatus}</span> : null}
           </div>
