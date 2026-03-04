@@ -1,23 +1,134 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffe45e;
-  --foreground: #111111;
+  /* NeoBrutalism WordDash palette */
+  --neo-yellow: #F5E642;
+  --neo-black: #0D0D0D;
+  --neo-white: #FAFAF5;
+  --neo-coral: #FF5C3A;
+  --neo-mint: #3DFFC0;
+  --neo-blue: #4DAAFF;
+  --neo-pink: #FF6EC7;
+
+  --background: #F5E642;
+  --foreground: #0D0D0D;
+  --card: #FAFAF5;
+  --card-foreground: #0D0D0D;
+  --popover: #FAFAF5;
+  --popover-foreground: #0D0D0D;
+  --primary: #0D0D0D;
+  --primary-foreground: #F5E642;
+  --secondary: #FAFAF5;
+  --secondary-foreground: #0D0D0D;
+  --muted: #e8e0b0;
+  --muted-foreground: #444444;
+  --accent: #FF5C3A;
+  --accent-foreground: #FAFAF5;
+  --destructive: #FF5C3A;
+  --destructive-foreground: #FAFAF5;
+  --border: #0D0D0D;
+  --input: #0D0D0D;
+  --ring: #0D0D0D;
+  --chart-1: #FF5C3A;
+  --chart-2: #3DFFC0;
+  --chart-3: #4DAAFF;
+  --chart-4: #FF6EC7;
+  --chart-5: #F5E642;
+  --radius: 0.75rem;
+  --sidebar: #FAFAF5;
+  --sidebar-foreground: #0D0D0D;
+  --sidebar-primary: #0D0D0D;
+  --sidebar-primary-foreground: #F5E642;
+  --sidebar-accent: #F5E642;
+  --sidebar-accent-foreground: #0D0D0D;
+  --sidebar-border: #0D0D0D;
+  --sidebar-ring: #0D0D0D;
+}
+
+.dark {
+  --background: #0D0D0D;
+  --foreground: #F5E642;
+  --card: #1a1a1a;
+  --card-foreground: #FAFAF5;
+  --popover: #1a1a1a;
+  --popover-foreground: #FAFAF5;
+  --primary: #F5E642;
+  --primary-foreground: #0D0D0D;
+  --secondary: #222222;
+  --secondary-foreground: #FAFAF5;
+  --muted: #222222;
+  --muted-foreground: #999999;
+  --accent: #FF5C3A;
+  --accent-foreground: #FAFAF5;
+  --destructive: #FF5C3A;
+  --destructive-foreground: #FAFAF5;
+  --border: #F5E642;
+  --input: #333333;
+  --ring: #F5E642;
+  --sidebar: #1a1a1a;
+  --sidebar-foreground: #FAFAF5;
+  --sidebar-primary: #F5E642;
+  --sidebar-primary-foreground: #0D0D0D;
+  --sidebar-accent: #222222;
+  --sidebar-accent-foreground: #FAFAF5;
+  --sidebar-border: #333333;
+  --sidebar-ring: #F5E642;
 }
 
 @theme inline {
+  --font-sans: var(--font-sans), "Geist", "Geist Fallback", system-ui, sans-serif;
+  --font-mono: var(--font-mono), "Geist Mono", "Geist Mono Fallback", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
+/* Play page neo-brutalism (keep for /play) */
 .neo-card {
   border: 4px solid #111111;
   border-radius: 18px;
