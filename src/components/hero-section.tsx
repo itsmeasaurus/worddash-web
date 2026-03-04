@@ -7,11 +7,18 @@ export function HeroSection() {
     <section className="bg-[#F5E642] border-b-4 border-[#0D0D0D]">
       <div className="max-w-6xl mx-auto px-6 py-20 md:py-28">
         {/* Marquee tag line */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-8 bg-[#FF5C3A] border-2 border-[#0D0D0D] rounded-full shadow-[3px_3px_0px_#0D0D0D]">
-          <span className="w-2 h-2 rounded-full bg-[#FAFAF5] animate-pulse" />
-          <span className="font-mono font-bold text-xs uppercase tracking-widest text-[#FAFAF5]">
-            Live Multiplayer
-          </span>
+        <div className="flex flex-wrap items-center gap-3 mb-8">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#FF5C3A] border-2 border-[#0D0D0D] rounded-full shadow-[3px_3px_0px_#0D0D0D]">
+            <span className="w-2 h-2 rounded-full bg-[#FAFAF5] animate-pulse" />
+            <span className="font-mono font-bold text-xs uppercase tracking-widest text-[#FAFAF5]">
+              Live Multiplayer
+            </span>
+          </div>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#0D0D0D] border-2 border-[#0D0D0D] rounded-full shadow-[3px_3px_0px_#3DFFC0]">
+            <span className="font-mono font-bold text-xs uppercase tracking-widest text-[#F5E642]">
+              Coming soon
+            </span>
+          </div>
         </div>
 
         {/* Big headline */}
